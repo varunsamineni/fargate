@@ -10,6 +10,7 @@ build:
 	go get github.com/hashicorp/golang-lru
 	go get golang.org/x/time/rate
 	go get golang.org/x/crypto/ssh/terminal
+	go get github.com/inconshreveable/mousetrap
 
 	go build -o bin/fargate main.go
 
@@ -18,11 +19,15 @@ dist:
 	GOOS=linux GOARCH=amd64 go build -o dist/build/fargate-linux-amd64/fargate main.go
 	GOOS=linux GOARCH=386 go build -o dist/build/fargate-linux-386/fargate main.go
 	GOOS=linux GOARCH=arm go build -o dist/build/fargate-linux-arm/fargate main.go
+	GOOS=windows GOARCH=amd64 go build -o dist/build/fargate-windows-amd64/fargate main.go
+	GOOS=windows GOARCH=386 go build -o dist/build/fargate-windows-386/fargate main.go
 
 	cd dist/build/fargate-darwin-amd64 && zip fargate-${FARGATE_VERSION}-darwin-amd64.zip fargate
 	cd dist/build/fargate-linux-amd64 && zip fargate-${FARGATE_VERSION}-linux-amd64.zip fargate
-	cd dist/build/fargate-linux-386  && zip fargate-${FARGATE_VERSION}-linux-386.zip fargate
-	cd dist/build/fargate-linux-arm  && zip fargate-${FARGATE_VERSION}-linux-arm.zip fargate
+	cd dist/build/fargate-linux-386 && zip fargate-${FARGATE_VERSION}-linux-386.zip fargate
+	cd dist/build/fargate-linux-arm && zip fargate-${FARGATE_VERSION}-linux-arm.zip fargate
+	cd dist/build/fargate-windows-amd64 && zip fargate-${FARGATE_VERSION}-windows-amd64.zip fargate
+	cd dist/build/fargate-windows-386 && zip fargate-${FARGATE_VERSION}-windows-386.zip fargate
 
 	find dist/build -name *.zip -exec mv {} dist \;
 

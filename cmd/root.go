@@ -69,6 +69,15 @@ CloudWatch Logs, and Amazon Route 53 into an easy-to-use CLI.`,
 			return
 		}
 
+		if verbose {
+			verbose = true
+			console.Verbose = true
+		}
+
+		if noColor || !terminal.IsTerminal(int(os.Stdout.Fd())) {
+			console.Color = false
+		}
+
 		envAwsDefaultRegion := os.Getenv("AWS_DEFAULT_REGION")
 		envAwsRegion := os.Getenv("AWS_REGION")
 
@@ -113,15 +122,6 @@ CloudWatch Logs, and Amazon Route 53 into an easy-to-use CLI.`,
 			default:
 				console.ErrorExit(err, "Could not create ECS cluster")
 			}
-		}
-
-		if verbose {
-			verbose = true
-			console.Verbose = true
-		}
-
-		if noColor || !terminal.IsTerminal(int(os.Stdout.Fd())) {
-			console.Color = false
 		}
 	},
 }
