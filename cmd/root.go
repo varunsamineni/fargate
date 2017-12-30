@@ -98,8 +98,7 @@ CloudWatch Logs, and Amazon Route 53 into an easy-to-use CLI.`,
 			),
 		)
 
-		ecs := ECS.New(sess)
-		err := ecs.CreateCluster()
+		_, err := sess.Config.Credentials.Get()
 
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
