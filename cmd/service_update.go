@@ -17,12 +17,14 @@ type ServiceUpdateOperation struct {
 }
 
 func (o *ServiceUpdateOperation) Validate() {
+	ecs := ECS.New(sess, clusterName)
+
 	if o.Cpu == "" && o.Memory == "" {
 		console.ErrorExit(fmt.Errorf("--cpu and/or --memory must be supplied"), "Invalid command line arguments")
 	}
 
-	o.Service = o.Ecs.DescribeService(o.ServiceName)
-	cpu, memory := o.Ecs.GetCpuAndMemoryFromTaskDefinition(o.Service.TaskDefinitionArn)
+	o.Service = ecs.DescribeService(o.ServiceName)
+	cpu, memory := ecs.GetCpuAndMemoryFromTaskDefinition(o.Service.TaskDefinitionArn)
 
 	if o.Cpu == "" {
 		o.Cpu = cpu
@@ -83,7 +85,9 @@ func init() {
 }
 
 func updateService(operation *ServiceUpdateOperation) {
-	newTaskDefinitionArn := operation.Ecs.UpdateTaskDefinitionCpuAndMemory(
+	ecs := ECS.New(sess, clusterName)
+
+	newTaskDefinitionArn := ecs.UpdateTaskDefinitionCpuAndMemory(
 		operation.Service.TaskDefinitionArn,
 		operation.Cpu,
 		operation.Memory,
